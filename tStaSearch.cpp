@@ -30,16 +30,15 @@
 #include "modelClass.h"
 #include "auxFunc.h"
 
-using namespace std;
 
 int main(int argc, char *argv[])
 {
 	int c;
-	string file;	
-	string search;
+	std::string file;	
+	std::string search;
 	bool invComp = true;
 	int contSize = -1;
-	double alpha = 	1.0/100;
+	double alpha = 	1.0/100;  // Default value
 	
 	while ((c = getopt(argc, (char **)argv, "c:f:s:a:ih")) != -1)
 	{
@@ -58,46 +57,46 @@ int main(int argc, char *argv[])
 			invComp = false;
 			break;
 			case 'a':
-			alpha = stod(optarg);
+			alpha = std::stod(optarg);
 			break;
 			case 'h':
 			default:
-			cerr << "Usage: ./tripleModel [options]\n";
-			cerr << "options: -c context size(*)\n";
-			cerr << setw(11);
-			cerr << "-f" << " file name(*)\n";
-			cerr << setw(11);
-			cerr << "-s" << " gene file name(*)\n";
-			cerr << setw(11);
-			cerr << "-i" << " (do not include inverted complements)\n";
-			cerr << setw(11);
-			cerr << "-a" << " alpha (default:1/100)\n";
-			cerr << setw(11);
-			cerr << "-h" << " (print this help)\n";
-			cerr << "Results are directed to standard output.\n";
-			cerr << "Note: options marked with (*) are mandatory" << endl;			
+			std::cerr << "Usage: ./tripleModel [options]\n";
+			std::cerr << "options: -c context size(*)\n";
+			std::cerr << std::setw(11);
+			std::cerr << "-f" << " file name(*)\n";
+			std::cerr << std::setw(11);
+			std::cerr << "-s" << " gene file name(*)\n";
+			std::cerr << std::setw(11);
+			std::cerr << "-i" << " (do not include inverted complements)\n";
+			std::cerr << std::setw(11);
+			std::cerr << "-a" << " alpha (default:1/100)\n";
+			std::cerr << std::setw(11);
+			std::cerr << "-h" << " (print this help)\n";
+			std::cerr << "Results are directed to standard output.\n";
+			std::cerr << "Note: options marked with (*) are mandatory" << std::endl;			
 			return 0;
 		}
     }
 
 	if(contSize == -1 || file.empty() || search.empty())
 	{
-		cerr << "Mandatory usage: ./tripleModel -c <order> -f <file name>\n";
+		std::cerr << "Mandatory usage: ./tripleModel -c <order> -f <file name>\n";
 	}
 	
 	else{
 	
-	ifstream fileRead(file,fstream::binary);
-	ifstream gene(search,fstream::binary);
+	std::ifstream fileRead(file,std::fstream::binary);
+	std::ifstream gene(search,std::fstream::binary);
 	
 	if(!gene.is_open())
 	{
-		cerr << "Error! Check gene file name." << endl;
+		std::cerr << "Error! Check gene file name." << std::endl;
 		return 0;
 	}
 	if(!fileRead.is_open())
 	{
-		cerr << "Error! Check file name." << endl;
+		std::cerr << "Error! Check file name." << std::endl;
 		return 0;
 	}
 
@@ -108,18 +107,19 @@ int main(int argc, char *argv[])
 	int length;
 	double bitSimbol = 0, totalBits = 0, bitSimbolInv = 0;
 	int mIdx;
-	string context = model.getInitialContext();
+	std::string context = model.getInitialContext();
 	char compBase = 'A';	// Initialized as 'A' for first iteration
-	string invComplemented;
+	std::string invComplemented;
 	invComplemented.resize(contSize);
+	
 	/*
 	 * Three states construction
 	 * */
 	 
-	gene.seekg(0,ios::end);
+	gene.seekg(0,std::ios::end);
 	length = gene.tellg();		// Total number of bases
-	gene.seekg(0,ios::beg);
-	cerr << "Gene: " << length << '\n';
+	gene.seekg(0,std::ios::beg);
+	std::cerr << "Gene length: " << length << '\n';
 	for(int i = 0; i < length; ++i)
 	{
 		gene.get(sB);
@@ -181,15 +181,15 @@ int main(int argc, char *argv[])
 	 * Bit calculations 
 	 * */
 	
-	fileRead.seekg(0,ios::end);
+	fileRead.seekg(0,std::ios::end);
 	length = fileRead.tellg();		// Total number of bases
-	vector<double> minBitFrames, minBitFramesInv;
+	std::vector<double> minBitFrames, minBitFramesInv;
 	minBitFrames.reserve(length);
 	minBitFramesInv.reserve(length);
 	for(int offset = 0; offset < 3; ++offset)
 	{
 	context = model.getInitialContext();
-	fileRead.seekg(0,ios::beg);
+	fileRead.seekg(0,std::ios::beg);
 
 	for(int i = 0; i < length; ++i)
 	{
@@ -251,22 +251,22 @@ int main(int argc, char *argv[])
 		{
 			minimumValue = std::min(minBitFrames[j],minBitFramesInv[j]);
 			totalBits += minimumValue;
-			cout << minimumValue << '\n';
+			std::cout << minimumValue << '\n';
 		}
 		else
 		{
 			totalBits += minBitFrames[j];
-			cout << minBitFrames[j] << '\n';
+			std::cout << minBitFrames[j] << '\n';
 		}
 	}
 	
-	cerr << "Total bits: " << totalBits << '\n';
-	cerr << "Length: " << length << '\n';
-	cerr << "Bits per simbol: " << totalBits/length << '\n';
+	std::cerr << "Total bits: " << totalBits << '\n';
+	std::cerr << "Length: " << length << '\n';
+	std::cerr << "Bits per simbol: " << totalBits/length << '\n';
 	
 	auto end = std::chrono::system_clock::now();
 	auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
-	cerr << elapsed.count() << " ms\n";
+	std::cerr << elapsed.count() << " ms\n";
 	}
 	return 0;
 }

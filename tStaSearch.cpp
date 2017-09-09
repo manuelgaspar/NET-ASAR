@@ -19,79 +19,18 @@
 #include <fstream>
 #include <string>
 #include <unordered_map>
-#include <math.h>
 #include <chrono>
 #include <algorithm>
 #include <unistd.h>
 #include <vector>
 #include <iomanip>
 
+
+#include "valueStruct.h"
+#include "modelClass.h"
+#include "auxFunc.h"
+
 using namespace std;
-
-int alSize = 4;
-double alpha = 	1.0/100;
-
-struct values
-{
-	int val[5];
-};
-
-class modelClass
-{
-	private:
-	int context;
-	string initialContext;	
-	public:
-	modelClass(int cont):context(cont)
-	{
-		initialContext.insert(0,cont,'A');
-	}
-	unordered_map<string,values> pMap[3];
-	int getContext(){return context;}
-	string getInitialContext(){return initialContext;}
-	
-};
-
-char complement(char c)
-{
-	switch(c)
-	{
-		case 'A':
-			return 'T';
-		case 'T':
-			return 'A';
-		case 'C':
-			return 'G';
-		case 'G':
-			return 'C';
-		default:
-			return c;
-	}
-}
-
-void reverseStr(string &str, int n)
-{
-    char temp;
-	for (int i=0; i<n/2; i++)
-    {
-		temp = str[i];
-		str[i] = str[n-i-1];
-		str[n-i-1] = temp;
-	}
-}
-
-double logCalc(modelClass *model, string context, int baseI, int mIdx)
-{
-	if(!model->pMap[mIdx].count(context))
-	//if(model->pMap[mIdx].find(context) == model->pMap[mIdx].end())
-	{
-		return -log2(alpha / (alSize * alpha));
-	}
-	else
-	{	
-		return -log2((model->pMap[mIdx][context].val[baseI] + alpha) / (model->pMap[mIdx][context].val[4] + alSize * alpha));
-	}
-}
 
 int main(int argc, char *argv[])
 {
@@ -100,6 +39,8 @@ int main(int argc, char *argv[])
 	string search;
 	bool invComp = true;
 	int contSize = -1;
+	double alpha = 	1.0/100;
+	
 	while ((c = getopt(argc, (char **)argv, "c:f:s:a:ih")) != -1)
 	{
         switch(c)
@@ -161,8 +102,8 @@ int main(int argc, char *argv[])
 	}
 
 	auto start = std::chrono::system_clock::now();
-	modelClass model(contSize);
-	modelClass modelInv(contSize);
+	modelClass model(contSize, alpha);
+	modelClass modelInv(contSize, alpha);
 	char sB;
 	int length;
 	double bitSimbol = 0, totalBits = 0, bitSimbolInv = 0;

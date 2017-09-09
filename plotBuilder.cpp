@@ -25,13 +25,14 @@
 
 int main(int argc, char *argv[])
 {
-	if(argc != 3)
+	if(argc != 4)
 	{
 		std::cerr << "Usage: " << argv[0] << " <data file full path> <threshold>\n";
 	}
 	else{
 	std::string filename = argv[1];
 	double threshold = std::stod(argv[2]);
+	std::string sourceFile = argv[3];
 	std::string directory;
 	const size_t last_slash_idx = filename.rfind('/');
 	if (std::string::npos != last_slash_idx)
@@ -42,6 +43,8 @@ int main(int argc, char *argv[])
 	std::ofstream script(scriptDirectory);
 	std::vector<std::string> intervals;
 	std::string input;
+	std::ifstream extractIn(sourceFile,std::fstream::binary);
+	std::string name = filename + "_segment_";
 	int inputSize = 0;
 	while(getline(std::cin,input))
 	{
@@ -52,6 +55,7 @@ int main(int argc, char *argv[])
 	}
 	std::string aux;
 	
+	std::ofstream extractOut[inputSize];
 	std::vector<std::string> positions;
 	for(int i = 0;i < inputSize; ++i)
 	{
@@ -60,6 +64,7 @@ int main(int argc, char *argv[])
 		{
 			positions.push_back(aux);
 		}
+		extractOut[i].open(name + std::to_string(i+1));
 	}
 	
 	script << "reset\n";
@@ -87,12 +92,30 @@ int main(int argc, char *argv[])
 	script << "set yrange [data_min_y - 0.1:data_max_y + 0.15]\n";	
 	script << "d = 1/data_max_x\n";
 	
+	
+	char seg;
+	int idx = 0;
 	for(int j = 0; j < inputSize * 2; j = j+2)
 	{
-		script << "set object " << j+1 << " rect from graph (" << positions[j] << "-0.001*data_max_x)*d,graph 1 to graph (" << positions[j+1]  << "+ 0.001*data_max_x)*d,graph 0.96 front fc rgb \"#DC143C\" fs noborder\n"; 
+		int start = std::stoi(positions[j]);
+		int end = std::stoi(positions[j+1]);
+		int aux = start;
+		script << "set object " << j+1 << " rect from graph (" << positions[j] << "-0.005*data_max_x)*d,graph 1 to graph (" << positions[j+1]  << "+ 0.005*data_max_x)*d,graph 0.96 front fc rgb \"#DC143C\" fs noborder\n"; 
+		for(int i = 0;i < end-start;++i)
+		{
+			extractIn.seekg(aux);
+			extractIn.get(seg);
+			extractOut[idx] << seg;
+			++aux;
+		}
+		++idx;
 	}
 	script << "plot '" << filename << "' w l lw 0.5 lc rgb \"#00008B\"\n";
 	script.close();
+	for(int i = 0;i < inputSize;++i)
+	{
+		extractOut[i].close();
 	}
 	return 0;
+	}
 }

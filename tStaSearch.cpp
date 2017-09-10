@@ -61,18 +61,13 @@ int main(int argc, char *argv[])
 			break;
 			case 'h':
 			default:
-			std::cerr << "Usage: ./tripleModel [options]\n";
+			std::cerr << "Usage: " << argv[0] << " [options]\n";
 			std::cerr << "options: -c context size(*)\n";
-			std::cerr << std::setw(11);
-			std::cerr << "-f" << " file name(*)\n";
-			std::cerr << std::setw(11);
-			std::cerr << "-s" << " gene file name(*)\n";
-			std::cerr << std::setw(11);
-			std::cerr << "-i" << " (do not include inverted complements)\n";
-			std::cerr << std::setw(11);
-			std::cerr << "-a" << " alpha (default:1/100)\n";
-			std::cerr << std::setw(11);
-			std::cerr << "-h" << " (print this help)\n";
+			std::cerr << std::setw(11) << "-f" << " file name(*)\n";
+			std::cerr << std::setw(11) << "-s" << " gene file name(*)\n";
+			std::cerr << std::setw(11) << "-i" << " (do not include inverted complements)\n";
+			std::cerr << std::setw(11) << "-a" << " alpha (default:1/100)\n";
+			std::cerr << std::setw(11) << "-h" << " (print this help)\n";
 			std::cerr << "Results are directed to standard output.\n";
 			std::cerr << "Note: options marked with (*) are mandatory" << std::endl;			
 			return 0;
@@ -81,7 +76,7 @@ int main(int argc, char *argv[])
 
 	if(contSize == -1 || file.empty() || search.empty())
 	{
-		std::cerr << "Mandatory usage: ./tripleModel -c <order> -f <file name>\n";
+		std::cerr << "Mandatory usage: " << argv[0] << " -c <order> -f <file name> -s <reference file name>\n";
 	}
 	
 	else{
@@ -175,7 +170,9 @@ int main(int argc, char *argv[])
 		context = context + sB;
 		context.erase(context.begin());
 	}
+	std::cerr << "CLOSE START\n";
 	gene.close();
+	std::cerr << "CLOSE END\n";
 
 	/* 
 	 * Bit calculations 

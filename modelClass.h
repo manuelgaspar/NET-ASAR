@@ -8,12 +8,12 @@
 class modelClass
 {
 	private:
-	int context;
+	const int context;
 	std::string initialContext;	
 	
 	public:
-	int alSize;
-	double alpha;
+	const int alSize;
+	const double alpha;
 	modelClass(int cont, double alpha_);
 	std::unordered_map<std::string,values> pMap[3];
 	int getContext();

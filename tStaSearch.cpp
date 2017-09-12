@@ -170,9 +170,7 @@ int main(int argc, char *argv[])
 		context = context + sB;
 		context.erase(context.begin());
 	}
-	std::cerr << "CLOSE START\n";
 	gene.close();
-	std::cerr << "CLOSE END\n";
 
 	/* 
 	 * Bit calculations 

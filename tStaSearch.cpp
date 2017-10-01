@@ -63,8 +63,8 @@ int main(int argc, char *argv[])
 			default:
 			std::cerr << "Usage: " << argv[0] << " [options]\n";
 			std::cerr << "options: -c context size(*)\n";
-			std::cerr << std::setw(11) << "-f" << " file name(*)\n";
-			std::cerr << std::setw(11) << "-s" << " gene file name(*)\n";
+			std::cerr << std::setw(11) << "-f" << " target file name(*)\n";
+			std::cerr << std::setw(11) << "-s" << " reference file name(*)\n";
 			std::cerr << std::setw(11) << "-i" << " (do not include inverted complements)\n";
 			std::cerr << std::setw(11) << "-a" << " alpha (default:1/100)\n";
 			std::cerr << std::setw(11) << "-h" << " (print this help)\n";
@@ -76,7 +76,7 @@ int main(int argc, char *argv[])
 
 	if(contSize == -1 || file.empty() || search.empty())
 	{
-		std::cerr << "Mandatory usage: " << argv[0] << " -c <order> -f <file name> -s <reference file name>\n";
+		std::cerr << "Mandatory usage: " << argv[0] << " -c <order> -f <target file name> -s <reference file name>\n";
 	}
 	
 	else{
@@ -86,12 +86,12 @@ int main(int argc, char *argv[])
 	
 	if(!gene.is_open())
 	{
-		std::cerr << "Error! Check gene file name." << std::endl;
+		std::cerr << "Error! Check reference file name." << std::endl;
 		return 0;
 	}
 	if(!fileRead.is_open())
 	{
-		std::cerr << "Error! Check file name." << std::endl;
+		std::cerr << "Error! Check target file name." << std::endl;
 		return 0;
 	}
 
@@ -114,7 +114,7 @@ int main(int argc, char *argv[])
 	gene.seekg(0,std::ios::end);
 	length = gene.tellg();		// Total number of bases
 	gene.seekg(0,std::ios::beg);
-	std::cerr << "Gene length: " << length << '\n';
+	std::cerr << "Reference length: " << length << '\n';
 	for(int i = 0; i < length; ++i)
 	{
 		gene.get(sB);
@@ -256,12 +256,12 @@ int main(int argc, char *argv[])
 	}
 	
 	std::cerr << "Total bits: " << totalBits << '\n';
-	std::cerr << "Length: " << length << '\n';
+	std::cerr << "Target length: " << length << '\n';
 	std::cerr << "Bits per simbol: " << totalBits/length << '\n';
 	
 	auto end = std::chrono::system_clock::now();
 	auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
-	std::cerr << elapsed.count() << " ms\n";
+	std::cerr << "Elapsed time: " << elapsed.count() << " ms\n";
 	}
 	return 0;
 }

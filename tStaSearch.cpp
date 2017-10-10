@@ -118,6 +118,7 @@ int main(int argc, char *argv[])
 	for(int i = 0; i < length; ++i)
 	{
 		gene.get(sB);
+		sB &= ~' ';
 		mIdx = i % 3;
 
 		switch(sB)
@@ -164,6 +165,7 @@ int main(int argc, char *argv[])
 				break;
 			}
 			compBase = context[0];
+			compBase &= ~' ';
 			modelInv.pMap[mIdx][invComplemented].val[4]++;
 		}
 		
@@ -189,6 +191,7 @@ int main(int argc, char *argv[])
 	for(int i = 0; i < length; ++i)
 	{
 		fileRead.get(sB);
+		sB &= ~' ';
 		mIdx = (i + offset) % 3;
 
 		switch(sB)

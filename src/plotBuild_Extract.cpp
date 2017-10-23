@@ -106,26 +106,25 @@ int main(int argc, char *argv[])
 	}
 	
 	script << "reset\n";
-	script << "set terminal png size 3000,750 enhanced font 'Verdana,22'\n";
-	script << "set tics font \"Helvetica,18\"\n";
-	script << "set style line 12 lc rgb '#808080' lt 0 lw 1\n";
+	script << "set terminal png size 3000,750 enhanced font 'Verdana,30'\n";
+	script << "set tics font \"Helvetica,26\"\n";
+	script << "set style line 12 lc rgb '#000000' lt 0 lw 1\n";
 	script << "set grid back ls 12\n";
 	script << "unset object\n";
 	script << "set output '" << filename << ".png'\n";
 	script << "unset log\n";
 	script << "unset label\n"; 
-	script << "set title \"Bits Per Base\" font \"Verdana:Bold,24\"\n";
 	script << "set nokey\n";
-	script << "set xlabel \"Base Index\"\n";
+	script << "set xlabel \"Base Index\" offset 0,0.5\n";
 	script << "set ylabel \"Bits\" offset 3,0\n";
-	script << "set style line 11 lc rgb '#808080' lt 1\n";
+	script << "set style line 11 lc rgb '#000000' lt 1\n";
 	script << "set border 3 back ls 11\n";
 	script << "set tics nomirror\n";
 	script << "stats '" << filename << "' using 1:2 name 'data'\n";
 	script << "set arrow 1 from graph 0,graph 0.98 to graph 1, graph 0.98 nohead lw 4 lc rgb \"#DC143C\" front\n";
 	script << "set arrow 2 from 0, " << threshold << " to data_max_x, " << threshold <<" nohead lw 3 lc rgb \"#FF4500\" front\n";
-	script << "set label 1 \"Threshold\" at data_max_x," << threshold <<" rotate left tc rgb \"#FF4500\" font \"Verdana:/Bold,18\" front\n";
-	script << "set label 2 \"" << threshold << "\" at data_min_x," << threshold << " offset -3,0 tc rgb \"#FF4500\" font \"Verdana:/Bold,18\" front\n";
+	script << "set label 1 \"Threshold\" at data_max_x," << threshold <<" rotate left tc rgb \"#FF4500\" font \"Verdana:/Bold,30\" front\n";
+	script << "set label 2 \"" << threshold << "\" at data_min_x," << threshold << " offset -3,0 tc rgb \"#FF4500\" font \"Verdana:/Bold,30\" front\n";
 	script << "set xrange [data_min_x:data_max_x]\n";
 	script << "set yrange [data_min_y - 0.1:data_max_y + 0.15]\n";	
 	script << "d = 1/data_max_x\n";

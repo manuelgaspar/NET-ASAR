@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
 			return 0;
 		}
 	}
-	if(filename.empty() | threshold == 100.1)
+	if(filename.empty() | (threshold == 100.1))
 	{
 		std::cerr << "Mandatory usage: " << argv[0] << " -f <data file full path> -t <threshold>\n";
 	}

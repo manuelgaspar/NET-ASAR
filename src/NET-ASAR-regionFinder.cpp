@@ -19,22 +19,49 @@
 #include <fstream>
 #include <string>
 #include <unistd.h>
+#include <iomanip>
 #include <map>
 
 int main(int argc, char *argv[])
 {
 	int pos;
 	double bits, prevBits = 20;
-	
-	if(argc != 3)
+	bool ordered = false;
+	double min = 100.1;
+	std::string file;
+	int c;
+	while ((c = getopt(argc, (char **)argv, "f:t:eh")) != -1)
 	{
-		std::cout << "Usage: " << argv[0] << " <filtered values file> <threshold value>\n";
+        switch(c)
+        {
+			case 'f':
+			file = optarg;
+			break;
+			case 't':
+			min = std::stod(optarg);
+			break;
+			case 'e':
+			ordered = true;
+			break;
+			case 'h':
+			default:	
+			std::cerr << "Usage: " << argv[0] << " [options]\n";
+			std::cerr << "options: -f filtered values file(*)\n";
+			std::cerr << std::setw(11) << "-t" << " threshold value(*)\n";	
+			std::cerr << std::setw(11) << "-e" << " (print regions including minimum entropy)\n";
+			std::cerr << std::setw(11) << "-h" << " (print this help)\n";
+			std::cerr << "Note: options marked with (*) are mandatory" << std::endl;
+			return 0;
+		}
+	}
+
+	if(file.empty() | (min == 100.1))
+	{
+		std::cout << "Mandatory usage: " << argv[0] << " -f <filtered values file> -t <threshold value>\n";
 		return 1;
 	}
 
 	
-	std::string file = argv[1];
-	double min = std::stod(argv[2]);
 	bool first = true;
 	std::multimap<double,std::string> intervals;
 	std::multimap<double,std::string>::iterator it;
@@ -79,7 +106,14 @@ int main(int argc, char *argv[])
 	
 	for (it=intervals.begin(); it!=intervals.end(); ++it)
 	{
-		std::cout << (*it).first << " => " << (*it).second << '\n';
+		if(!ordered)
+		{	
+			std::cout << (*it).second << '\n';
+		}
+		else
+		{
+			std::cout << (*it).second << " - Minimum entropy in region: " << (*it).first << '\n';
+		}
 	}
 	return 0;
 }

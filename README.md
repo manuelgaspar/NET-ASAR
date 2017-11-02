@@ -62,6 +62,6 @@ Note: options marked with (*) are mandatory
 
 ## Example use
 
-An example use of the programs provided is available in the folder [Example_use](https://github.com/manuelgaspar/NET-ASAR/Example_use). This example can be used to assess the correction functioning of the installed programs.
+An example use of the programs provided is available in the folder [Example_use](Example_use). This example can be used to assess the correction functioning of the installed programs.
 
 The parameters used in the example are provided in the Readme available in the folder. 
